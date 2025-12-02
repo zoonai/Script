@@ -81,128 +81,86 @@ main.AnchorPoint = Vector2.new(0.5, 0.5) -- Center anchor
 main.BackgroundTransparency = 1
 main.Parent = gui
 
--- Background with modern gradient
+-- Simple background
 local bg = Instance.new("Frame", main)
 bg.Size = UDim2.new(1, 0, 1, 0)
-bg.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-bg.BackgroundTransparency = 0.1
+bg.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+bg.BackgroundTransparency = 0.05
 bg.BorderSizePixel = 0
 
--- Modern rounded corners
+-- Rounded corners
 local corner = Instance.new("UICorner", bg)
-corner.CornerRadius = UDim.new(0, 20)
+corner.CornerRadius = UDim.new(0, 16)
 
--- Subtle stroke
-local stroke = Instance.new("UIStroke", bg)
-stroke.Color = Color3.fromRGB(60, 160, 255)
-stroke.Thickness = 1.5
-stroke.Transparency = 0.5
-
--- Gradient effect
-local gradient = Instance.new("UIGradient", bg)
-gradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 25, 35)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 20))
-}
-gradient.Rotation = 45
-
--- Title with icon
+-- Title
 local title = Instance.new("TextLabel", bg)
 title.Text = "SansMobaHub"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 20
+title.TextSize = 18
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.BackgroundTransparency = 1
-title.Position = UDim2.new(0, 25, 0, 20)
-title.Size = UDim2.new(1, -50, 0, 25)
-title.TextXAlignment = Enum.TextXAlignment.Left
-
--- Subtitle
-local subtitle = Instance.new("TextLabel", bg)
-subtitle.Text = "Premium Access"
-subtitle.Font = Enum.Font.Gotham
-subtitle.TextSize = 13
-subtitle.TextColor3 = Color3.fromRGB(150, 180, 255)
-subtitle.BackgroundTransparency = 1
-subtitle.Position = UDim2.new(0, 25, 0, 45)
-subtitle.Size = UDim2.new(1, -50, 0, 18)
-subtitle.TextXAlignment = Enum.TextXAlignment.Left
+title.Position = UDim2.new(0, 0, 0, 20)
+title.Size = UDim2.new(1, 0, 0, 22)
+title.TextXAlignment = Enum.TextXAlignment.Center
 
 -- Status Text
 local msg = Instance.new("TextLabel", bg)
-msg.Text = "Initializing..."
+msg.Text = "Loading..."
 msg.Font = Enum.Font.Gotham
 msg.TextSize = 14
-msg.TextColor3 = Color3.fromRGB(200, 200, 200)
+msg.TextColor3 = Color3.fromRGB(180, 180, 180)
 msg.BackgroundTransparency = 1
-msg.Position = UDim2.new(0, 25, 0, 80)
-msg.Size = UDim2.new(1, -50, 0, 20)
-msg.TextXAlignment = Enum.TextXAlignment.Left
+msg.Position = UDim2.new(0, 0, 0, 50)
+msg.Size = UDim2.new(1, 0, 0, 20)
+msg.TextXAlignment = Enum.TextXAlignment.Center
 
 -- Progress Bar Container
 local barBG = Instance.new("Frame", bg)
-barBG.Position = UDim2.new(0, 25, 1, -35)
-barBG.Size = UDim2.new(1, -50, 0, 6)
-barBG.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-barBG.BackgroundTransparency = 0
+barBG.Position = UDim2.new(0, 30, 1, -30)
+barBG.Size = UDim2.new(1, -60, 0, 4)
+barBG.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 barBG.BorderSizePixel = 0
 Instance.new("UICorner", barBG).CornerRadius = UDim.new(1, 0)
 
 -- Progress Fill
 local barFill = Instance.new("Frame", barBG)
 barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(60, 160, 255)
+barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 barFill.BorderSizePixel = 0
 Instance.new("UICorner", barFill).CornerRadius = UDim.new(1, 0)
 
 -- Scale animation for entrance
-local targetSize = UDim2.new(0, 340, 0, 140)
-TweenService:Create(main, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+local targetSize = UDim2.new(0, 280, 0, 110)
+TweenService:Create(main, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
     Size = targetSize
 }):Play()
 
 -- Progress bar animation
 local fillTween = TweenService:Create(
     barFill,
-    TweenInfo.new(4.5, Enum.EasingStyle.Sine),
+    TweenInfo.new(3, Enum.EasingStyle.Linear),
     { Size = UDim2.new(1, 0, 1, 0) }
 )
-
--- Update status text during loading
-task.spawn(function()
-    local messages = {
-        "Connecting to server...",
-        "Loading resources...",
-        "Initializing scripts...",
-        "Almost ready..."
-    }
-    
-    for i, text in ipairs(messages) do
-        msg.Text = text
-        task.wait(1.1)
-    end
-end)
 
 task.wait(0.3)
 fillTween:Play()
 
 -- Completion
 fillTween.Completed:Connect(function()
-    msg.Text = "Ready! ✓"
-    msg.TextColor3 = Color3.fromRGB(100, 255, 150)
+    msg.Text = "Complete"
     
-    task.wait(0.5)
+    task.wait(0.3)
 
     -- Exit animation
-    TweenService:Create(main, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+    TweenService:Create(main, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
         Size = UDim2.new(0, 0, 0, 0)
     }):Play()
 
-    TweenService:Create(blur, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+    TweenService:Create(blur, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
         Size = 0
     }):Play()
 
-    task.wait(0.5)
+    task.wait(0.4)
     gui:Destroy()
     blur:Destroy()
 
